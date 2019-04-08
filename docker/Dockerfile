@@ -6,7 +6,7 @@ COPY . /opt/etherpad-lite
 
 RUN /opt/etherpad-lite/bin/installDeps.sh
 
-FROM node:latest
+FROM node:alpine
 
 ENV NODE_ENV "production"
 ENV EP_TITLE "Etherpad"
@@ -28,9 +28,9 @@ ENV MYSQL_DATABASE ""
 
 COPY --from=builder /opt/etherpad-lite /app
 COPY ./docker/docker-entrypoint.sh /docker-entrypoint.sh
-RUN apt-get update && \
-    apt-get -y install abiword tidy mysql-client && \
-    apt-get -y clean
+RUN apk update &&\
+    apk add abiword bash mysql-client tidyhtml &&\
+    rm -rf /var/cache/apk/*
 WORKDIR /app
 
 COPY ./docker/prepare-settings-workaround.sh /app/bin/prepareSettings.sh
