@@ -1,0 +1,44 @@
+version: '3'
+services:
+  etherpad:
+    image: etherpad:latest
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      EP_ADMIN_PASS: test123
+      MYSQL_HOST: mysql
+      MYSQL_USER: etherpad
+      MYSQL_PASSWORD: etherpad
+      MYSQL_DATABASE: etherpad_lite_db
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    ports:
+      - '9001:9001'
+    links:
+      - 'mysql'
+  mysql:
+    image: mariadb:latest
+    command: --verbose
+    restart: always
+    environment:
+      MYSQL_USER: etherpad
+      MYSQL_PASSWORD: etherpad
+      MYSQL_DATABASE: etherpad_lite_db
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    volumes:
+      - data-volume:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    ports:
+      - '3306:3306'
+
+volumes:
+  data-volume:

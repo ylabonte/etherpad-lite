@@ -1,49 +1,40 @@
-# Etherpad Lite Dockerfile
-#
-# https://github.com/ether/etherpad-docker
-#
-# Author: muxator
-#
-# Version 0.1
+FROM node:latest AS builder
 
-FROM node:latest
-LABEL maintainer="Etherpad team, https://github.com/ether/etherpad-lite"
-
-# git hash of the version to be built.
-# If not given, build the latest development version.
 ARG ETHERPAD_VERSION=develop
+ARG NODE_ENV=production
+COPY . /opt/etherpad-lite
 
-# Set the following to production to avoid installing devDeps
-# this can be done with build args (and is mandatory to build ARM version)
-ARG NODE_ENV=development
-
-# grab the ETHERPAD_VERSION tarball from github (no need to clone the whole
-# repository)
-RUN echo "Getting version: ${ETHERPAD_VERSION}" && \
-	curl \
-		--location \
-		--fail \
-		--silent \
-		--show-error \
-		--output /opt/etherpad-lite.tar.gz \
-		https://github.com/ether/etherpad-lite/archive/"${ETHERPAD_VERSION}".tar.gz && \
-	mkdir /opt/etherpad-lite && \
-	tar xf /opt/etherpad-lite.tar.gz \
-		--directory /opt/etherpad-lite \
-		--strip-components=1 && \
-	rm /opt/etherpad-lite.tar.gz
-
-# install node dependencies for Etherpad
 RUN /opt/etherpad-lite/bin/installDeps.sh
 
-# Copy the custom configuration file, if present. The configuration file has to
-# be manually put inside the same directory containing the Dockerfile (we cannot
-# directly point to "../settings.json" for Docker's security restrictions).
-#
-# For the conditional COPY trick, see:
-#   https://stackoverflow.com/questions/31528384/conditional-copy-add-in-dockerfile#46801962
-COPY nop setting[s].json /opt/etherpad-lite/
+FROM node:latest
 
-EXPOSE 9001
-WORKDIR /opt/etherpad-lite
-CMD ["node", "node_modules/ep_etherpad-lite/node/server.js"]
+ENV NODE_ENV "production"
+ENV EP_TITLE "Etherpad"
+ENV EP_THEME "colibris"
+ENV EP_DEFAULT_TEXT "Start writing..."
+ENV EP_DEFAULT_LANG "en-us"
+ENV EP_LISTEN "0.0.0.0"
+ENV EP_PORT "9001"
+ENV EP_ADMIN_USER "admin"
+ENV EP_ADMIN_PASS "admin"
+ENV EP_LOG_LEVEL "WARN"
+ENV EP_ABIWORD_BIN "/usr/bin/abiword"
+ENV EP_TIDY_BIN "/usr/bin/tidy"
+ENV MYSQL_HOST ""
+ENV MYSQL_PORT "3306"
+ENV MYSQL_USER ""
+ENV MYSQL_PASSWORD ""
+ENV MYSQL_DATABASE ""
+
+COPY --from=builder /opt/etherpad-lite /app
+COPY ./docker/docker-entrypoint.sh /docker-entrypoint.sh
+RUN apt-get update && \
+    apt-get -y install abiword tidy mysql-client && \
+    apt-get -y clean
+WORKDIR /app
+
+COPY ./docker/prepare-settings-workaround.sh /app/bin/prepareSettings.sh
+
+EXPOSE ${EP_PORT}
+ENTRYPOINT ["/bin/bash", "/docker-entrypoint.sh"]
+CMD ["start"]
