@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This script is a workaround for using environment vars in the config file.
 # It can be removed as far as the built-in feature for environment variables in
@@ -8,7 +8,7 @@
 IN_FILE=$1
 OUT_FILE=$2
 
-if [ "$IN_FILE" == "" ]; then
+if [ "$IN_FILE" = "" ]; then
   echo "Missing first argument: Input file path"
   exit 1
 fi
@@ -16,7 +16,7 @@ if [ ! -r "$IN_FILE" ]; then
   echo "Invalid first argument: Cannot read from '$1'"
   exit 1
 fi
-if [ "$OUT_FILE" == "" ]; then
+if [ "$OUT_FILE" = "" ]; then
   OUT_FILE=$IN_FILE
 else
   if [ -e $OUT_FILE ] && [ ! -w $OUT_FILE ]; then
@@ -33,7 +33,7 @@ cat $IN_FILE > $TMP1_FILE
 for line in $(env); do
   # assignment=$(echo $line | grep "^EP_")
   assignment=$line
-  if [ "$assignment" == "" ]; then
+  if [ "$assignment" = "" ]; then
     continue
   fi
   envVar=`echo $assignment | awk -F= '{ print $1 }'`
