@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etherpad-config
+  namespace: etherpad
+  labels:
+    app: etherpad
+    layer: backend
+    project: etherpad
+data:
+  EP_ADMIN_PASS: "admin123"
+  EP_DB_TYPE: "mysql"
+  EP_MYSQL_HOST: "mysql"
+  EP_MYSQL_USER: "etherpad"
+  EP_MYSQL_PASSWORD: "etherpad"
+  EP_MYSQL_DATABASE: "etherpad_lite_db"
+  EP_MYSQL_PORT: "3306"
+  EP_LOG_LEVEL: "WARN"
