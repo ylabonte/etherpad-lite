@@ -133,11 +133,11 @@
   "dbType" : "{{ EP_DB_TYPE }}",
   "dbSettings" : {
                    "filename": "var/dirty.db",
-                   "user"    : "{{ MYSQL_USER }}",
-                   "host"    : "{{ MYSQL_HOST }}",
-                   "port"    : "{{ MYSQL_PORT }}",
-                   "password": "{{ MYSQL_PASSWORD }}",
-                   "database": "{{ MYSQL_DATABASE }}",
+                   "user"    : "{{ EP_MYSQL_USER }}",
+                   "host"    : "{{ EP_MYSQL_HOST }}",
+                   "port"    : "{{ EP_MYSQL_PORT }}",
+                   "password": "{{ EP_MYSQL_PASSWORD }}",
+                   "database": "{{ EP_MYSQL_DATABASE }}",
                    "charset" : "utf8mb4"
                  },
 

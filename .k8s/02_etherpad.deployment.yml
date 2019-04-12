@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: etherpad
+  namespace: etherpad
+  labels:
+    app: etherpad
+    layer: backend
+    project: etherpad
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+  template:
+    metadata:
+      labels:
+        app: etherpad
+        layer: backend
+        project: etherpad
+    spec:
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      containers:
+        - name: etherpad
+          image: etherpad:latest
+          imagePullPolicy: Never
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "cd /app && ./bin/prepareSettings.sh settings.json.docker settings.json && node node_modules/ep_etherpad-lite/node/server.js"
+          ports:
+            - containerPort: 9001
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 300m
+              memory: 1Gi
+          envFrom:
+            - configMapRef:
+                name: etherpad-config
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP

@@ -1,10 +1,7 @@
 version: '3'
 services:
   etherpad:
-    image: etherpad:latest
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+    image: labonte/etherpad:latest
     restart: always
     depends_on:
       - mysql
@@ -21,7 +18,7 @@ services:
         limits:
           memory: 1000M
     ports:
-      - '9003:9001'
+      - '9001:9001'
     links:
       - 'mysql'
   mysql:
@@ -39,8 +36,8 @@ services:
       resources:
         limits:
           memory: 1000M
-    expose:
-      - 3306
+    ports:
+      - '3306:3306'
 
 volumes:
   data-volume:

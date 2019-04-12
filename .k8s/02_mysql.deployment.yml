@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: etherpad
+  labels:
+    app: mysql
+    layer: db
+    project: etherpad
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mysql
+        layer: db
+        project: etherpad
+    spec:
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      containers:
+        - name: mysql
+          image: mariadb:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          envFrom:
+            - configMapRef:
+                name: mysql-config
+          env:
+            - name: MYSQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: MYSQL_PORT
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP

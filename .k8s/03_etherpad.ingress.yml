@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: etherpad-expose
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "172.16.0.0/16"
+spec:
+  rules:
+  - host: etherpad.dev.govbot.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: etherpad
+          servicePort: 9001
