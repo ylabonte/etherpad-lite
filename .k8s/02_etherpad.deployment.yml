@@ -26,8 +26,8 @@ spec:
       restartPolicy: Always
       containers:
         - name: etherpad
-          image: etherpad:latest
-          imagePullPolicy: Never
+          image: labonte/etherpad:latest
+          imagePullPolicy: IfNotPresent
           command:
             - "/bin/sh"
             - "-c"
