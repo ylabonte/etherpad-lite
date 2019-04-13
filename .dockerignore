@@ -1,0 +1,8 @@
+.k8s/
+.idea/
+.git/
+doc/
+node_modules/
+.DS_Store
+APIKEY.txt
+SESSIONKEY.txt

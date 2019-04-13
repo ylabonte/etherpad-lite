@@ -6,7 +6,6 @@ metadata:
     app: mysql
     layer: volume
     project: etherpad
-    type: local
 spec:
   storageClassName: manual
   capacity:
@@ -14,4 +13,4 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/data"
+    path: "/mnt/mysql-volume"
