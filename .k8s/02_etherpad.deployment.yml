@@ -27,7 +27,7 @@ spec:
       containers:
         - name: etherpad
           image: labonte/etherpad:alpine
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           command:
             - "/bin/sh"
             - "-c"
@@ -37,7 +37,7 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: 300m
+              cpu: 900m
               memory: 1Gi
           envFrom:
             - configMapRef:

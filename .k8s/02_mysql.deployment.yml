@@ -20,16 +20,23 @@ spec:
     spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql-volume-claim
       containers:
         - name: mysql
           image: mariadb:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /var/lib/data
+              name: mysql-data
           ports:
             - containerPort: 3306
               protocol: TCP
           resources:
             limits:
-              cpu: 500m
+              cpu: 900m
               memory: 1Gi
           envFrom:
             - configMapRef:
