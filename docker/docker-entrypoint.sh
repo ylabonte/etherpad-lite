@@ -14,6 +14,10 @@ fi
 if [ "$1" = "start" ]
 then
     cd /app
+    if [ ! -z "$EP_PLUGINS" ]
+    then
+        npm install $EP_PLUGINS
+    fi
     ./bin/prepareSettings.sh settings.json.docker settings.json
     COUNTER=0
     if [ "$EP_DB_TYPE" = "mysql" ]

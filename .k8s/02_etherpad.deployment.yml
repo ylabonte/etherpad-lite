@@ -8,7 +8,7 @@ metadata:
     layer: backend
     project: etherpad
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 3 
   strategy:
     type: RollingUpdate
@@ -26,12 +26,12 @@ spec:
       restartPolicy: Always
       containers:
         - name: etherpad
-          image: labonte/etherpad:alpine
+          image: etherpad:alpine
           imagePullPolicy: Always
-          command:
-            - "/bin/sh"
-            - "-c"
-            - "cd /app && ./bin/prepareSettings.sh settings.json.docker settings.json && node node_modules/ep_etherpad-lite/node/server.js"
+          # command:
+          #   - "/bin/sh"
+          #   - "-c"
+          #   - "cd /app && ./bin/prepareSettings.sh settings.json.docker settings.json && node node_modules/ep_etherpad-lite/node/server.js"
           ports:
             - containerPort: 9001
               protocol: TCP

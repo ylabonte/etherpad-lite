@@ -7,6 +7,13 @@ COPY . /opt/etherpad-lite
 WORKDIR /opt/etherpad-lite/src
 RUN ../bin/installDeps.sh
 
+FROM node:alpine as stage2
+
+COPY --from=builder /opt/etherpad-lite /opt/etherpad-lite
+WORKDIR /opt/etherpad-lite
+RUN apk update && apk add alpine-sdk python
+RUN npm install bcrypt
+
 FROM node:alpine
 
 ENV NODE_ENV "production"
@@ -27,7 +34,7 @@ ENV EP_MYSQL_USER "etherpad"
 ENV EP_MYSQL_PASSWORD "etherpad"
 ENV EP_MYSQL_DATABASE "etherpad_lite_db"
 
-COPY --from=builder /opt/etherpad-lite /app
+COPY --from=stage2 /opt/etherpad-lite /app
 COPY ./docker/docker-entrypoint.sh /docker-entrypoint.sh
 RUN apk update &&\
     apk add abiword abiword-plugin-command mysql-client tidyhtml &&\

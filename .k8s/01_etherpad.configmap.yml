@@ -16,3 +16,27 @@ data:
   EP_MYSQL_DATABASE: "etherpad_lite_db"
   EP_MYSQL_PORT: "3306"
   EP_LOG_LEVEL: "WARN"
+  EP_PLUGINS: |
+    ep_codepad
+    ep_align
+    ep_image_upload
+    ep_real_time_chat
+    ep_font_color
+    ep_tables2
+    ep_markdown
+    ep_draw
+    ep_aa_file_menu_toolbar
+    ep_font_size
+    ep_headings2
+    ep_embedded_hyperlinks2
+    ep_small_list
+    ep_horizontal_line
+    ep_tasklist
+    ep_embedmedia
+    ep_cursortrace
+    ep_syntax
+    ep_timesliderdiff
+    ep_font_family
+    ep_help_bubbles
+    ep_previewimages
+    ep_warn_too_much_chars

@@ -11,7 +11,7 @@ metadata:
     nginx.ingress.kubernetes.io/whitelist-source-range: "172.16.0.0/16"
 spec:
   rules:
-  - host: etherpad.dev.govbot.io
+  - host: etherpad.your-domain.dev
     http:
       paths:
       - path: /
